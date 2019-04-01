@@ -26,7 +26,7 @@ router.route('/login')
         await db
                 .getUserByUsername(userData.username)
                 .then(user => {
-                    if(user.length && bcrypt.compareSync(userData.password, user.password)){
+                    if(user && bcrypt.compareSync(userData.password, user.password)){
                         req.session.userID = user.id;
                         res.json({ message: 'Correct' });
                     }else{
@@ -40,6 +40,21 @@ router.route('/login')
                         .status(500)
                         .json({ err });
                 });
+    });
+
+router.route('/logout')
+    .get(async (req, res) => {
+        req.session.destroy((err) => {
+            if(err){
+                res
+                    .status(500)
+                    .json({ message: 'Failed to log out.' });
+            }else{
+                res
+                    .status(200)
+                    .json({ message: 'Successfully logged out' });
+            }
+        });
     });
 
 module.exports = router;
