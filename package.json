@@ -1,0 +1,8 @@
+{
+  "name": "Lambda-School-Day-061-webauth-i-challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Estrax/Lambda-School-Day-061-webauth-i-challenge.git",
+  "author": "Łukasz Siatka <lukasz@lukaszsiatka.pl>",
+  "license": "MIT"
+}
