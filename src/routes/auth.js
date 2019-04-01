@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 router.route('/register')
     .post(async (req, res) => {
         let user = req.body;
-        user.password = bcrypt.hashSync(user.password, 20);
+        user.password = bcrypt.hashSync(user.password, 12);
         await db
                 .addUser(user)
                 .then(id => {
@@ -22,7 +22,24 @@ router.route('/register')
 
 router.route('/login')
     .post(async (req, res) => {
-
+        const userData = req.body;
+        await db
+                .getUserByUsername(userData.username)
+                .then(user => {
+                    if(user.length && bcrypt.compareSync(userData.password, user.password)){
+                        req.session.userID = user.id;
+                        res.json({ message: 'Correct' });
+                    }else{
+                        res
+                            .status(404)
+                            .json({ message: 'You shall not pass'});
+                    }
+                })
+                .catch(err => {
+                    res
+                        .status(500)
+                        .json({ err });
+                });
     });
 
 module.exports = router;
