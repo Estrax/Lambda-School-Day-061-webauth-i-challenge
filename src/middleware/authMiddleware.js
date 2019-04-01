@@ -1,7 +1,7 @@
 module.exports = {
-    
+    authenticated
 };
 
-async function blank(){
+async function authenticated(){
     return undefined;
 }
