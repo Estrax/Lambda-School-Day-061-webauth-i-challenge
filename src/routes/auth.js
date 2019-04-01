@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const db = require('../database/helpers/helpers');
 const bcrypt = require('bcryptjs');
+const { authenticated } = require('../middleware/authMiddleware');
 
 router.route('/register')
     .post(async (req, res) => {
@@ -43,7 +44,7 @@ router.route('/login')
     });
 
 router.route('/logout')
-    .get(async (req, res) => {
+    .get(authenticated, async (req, res) => {
         req.session.destroy((err) => {
             if(err){
                 res
