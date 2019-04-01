@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
+const { restricted } = require('../middleware/authMiddleware');
 
 require('dotenv').config();
 
@@ -22,4 +23,5 @@ module.exports = (app) => {
         httpOnly: true
     }));
     app.use(cors());
+    app.use(restricted);
 }
