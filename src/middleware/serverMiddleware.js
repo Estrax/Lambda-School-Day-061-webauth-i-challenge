@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
 const { restricted } = require('../middleware/authMiddleware');
+const knexConfig = require('../database/dbConfig');
+const knexSessionStore = require('connect-session-knex')(session);
 
 require('dotenv').config();
 
@@ -16,11 +18,19 @@ module.exports = (app) => {
         name: 'sessionName',
         secret: process.env.SECRET_KEY || 'secretKey',
         cookie: {
-            maxAge: 24*3600000
+            maxAge: 1000*60*15,
+            secure: false,
+            httpOnly: true
         },
         resave: false,
         saveUninitialized: false,
-        httpOnly: true
+        store: new knexSessionStore({
+            knex: knexConfig,
+            tablename: 'sessions',
+            sidfieldname: 'sid',
+            createtable: true,
+            clearInterval: 1000*60*60
+        })
     }));
     app.use(cors());
     app.use(restricted);
